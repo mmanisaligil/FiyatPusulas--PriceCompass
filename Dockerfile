@@ -23,10 +23,13 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ###############################
 FROM node:20-alpine AS web-build
 WORKDIR /app
-ENV NODE_ENV=production
+# Install both production and dev dependencies so Tailwind and other build-time
+# tools are available during the Next.js compilation step. The runtime image
+# remains production-focused.
+ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY services/web/package*.json ./
-RUN npm install --frozen-lockfile || npm install
+RUN npm install
 COPY services/web ./
 RUN npm run build
 
