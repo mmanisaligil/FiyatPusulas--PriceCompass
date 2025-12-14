@@ -37,6 +37,20 @@ Docker-first MVP for a privacy-preserving price observatory. Users upload receip
    docker compose exec api python scripts/seed_baselines.py
    ```
 
+### Deploying a single container (DigitalOcean App Platform)
+- The repository ships with a root `Dockerfile` exposing two build targets:
+  - **api** (default): FastAPI service on port 8000.
+  - **web**: Next.js frontend on port 3000.
+- Example builds:
+  ```bash
+  # Build API image (default target)
+  docker build -t fiyatpusulasi-api .
+
+  # Build frontend image
+  docker build -t fiyatpusulasi-web --target web .
+  ```
+- Set `NEXT_PUBLIC_API_BASE_URL` and other envs in your DigitalOcean App settings; the image CMDs already bind to `0.0.0.0`.
+
 Frontend is served at `http://localhost:3000` and proxies directly to the API URL configured by `NEXT_PUBLIC_API_BASE_URL`.
 
 The API listens on `http://localhost:8000`.
