@@ -1,0 +1,11 @@
+__pycache__/
+.env
+.env.local
+node_modules/
+.next/
+.out/
+dist/
+*.log
+.coverage
+htmlcov/
+.DS_Store
