@@ -2,7 +2,7 @@ import uuid
 from datetime import date
 import re
 
-from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, UploadFile
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -52,10 +52,10 @@ async def get_or_create_user(session: AsyncSession, user_hash: str) -> UserAnony
 
 @router.post("/upload")
 async def upload_receipt(
-    retailer_name: str,
-    transaction_date: date,
-    location_city: str | None = None,
-    total_amount: float | None = None,
+    retailer_name: str = Form(...),
+    transaction_date: date = Form(...),
+    location_city: str | None = Form(None),
+    total_amount: float | None = Form(None),
     file: UploadFile = File(...),
     x_user_hash: str = Header(..., alias="X-User-Hash"),
     session: AsyncSession = Depends(get_session),

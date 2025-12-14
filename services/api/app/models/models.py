@@ -1,9 +1,11 @@
+
+from __future__ import annotations
+
 import enum
 import uuid
 from datetime import datetime, date
 
-from sqlalchemy import JSON, Date, DateTime, Enum, Float, ForeignKey, Numeric, String, Text, UniqueConstraint, Index
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON, Date, DateTime, Enum, Float, ForeignKey, Numeric, String, Text, UniqueConstraint, Index, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -80,7 +82,7 @@ class ExtractedLineItem(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     receipt: Mapped[Receipt] = relationship(back_populates="line_items")
-    canonical_product: Mapped["CanonicalProduct" | None] = relationship(back_populates="line_items")
+    canonical_product: Mapped[CanonicalProduct | None] = relationship(back_populates="line_items")
 
     __table_args__ = (Index("ix_extracted_line_items_normalized", "raw_text_normalized"),)
 
@@ -93,8 +95,8 @@ class CanonicalCategory(Base):
     name_tr: Mapped[str] = mapped_column(String, nullable=False)
     weight_factor: Mapped[float] = mapped_column(Float, default=1.0, nullable=False)
 
-    parent: Mapped["CanonicalCategory" | None] = relationship(remote_side=[id])
-    products: Mapped[list["CanonicalProduct"]] = relationship(back_populates="category")
+    parent: Mapped[CanonicalCategory | None] = relationship(remote_side=[id])
+    products: Mapped[list[CanonicalProduct]] = relationship(back_populates="category")
 
 
 class CanonicalProduct(Base):
@@ -107,10 +109,10 @@ class CanonicalProduct(Base):
     attributes: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     category: Mapped[CanonicalCategory] = relationship(back_populates="products")
-    aliases: Mapped[list["ProductAlias"]] = relationship(back_populates="product", cascade="all, delete-orphan")
+    aliases: Mapped[list[ProductAlias]] = relationship(back_populates="product", cascade="all, delete-orphan")
     line_items: Mapped[list[ExtractedLineItem]] = relationship(back_populates="canonical_product")
-    barcode_mappings: Mapped[list["BarcodeMapping"]] = relationship(back_populates="product")
-    aggregates: Mapped[list["IndexDailyAggregate"]] = relationship(back_populates="product")
+    barcode_mappings: Mapped[list[BarcodeMapping]] = relationship(back_populates="product")
+    aggregates: Mapped[list[IndexDailyAggregate]] = relationship(back_populates="product")
 
 
 class ProductAlias(Base):
@@ -157,7 +159,6 @@ class PersonalInflationSnapshot(Base):
     period_month: Mapped[date] = mapped_column(Date, primary_key=True)
     personal_cpi_value: Mapped[float] = mapped_column(Numeric, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
-
 
 class InflationBaseline(Base):
     __tablename__ = "inflation_baselines"

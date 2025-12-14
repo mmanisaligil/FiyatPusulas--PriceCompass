@@ -12,7 +12,7 @@ async def test_alias_exact_match(session):
     product = CanonicalProduct(name_tr="Sut 1L", base_unit="ml", category=category)
     alias = ProductAlias(
         raw_text_normalized="SUT 1L",
-        canonical_product_id=product.id,
+        product=product,
         match_source=MatchSource.EXACT,
         confidence=0.95,
     )
