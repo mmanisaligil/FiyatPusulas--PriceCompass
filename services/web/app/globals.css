@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 min-h-screen;
+}
+
+a {
+  @apply text-brand hover:text-brand-light transition-colors;
+}
+
+.button-primary {
+  @apply inline-flex items-center justify-center rounded-md bg-brand text-white px-4 py-2 font-medium shadow hover:bg-cyan-700 transition-colors;
+}
+
+.card {
+  @apply bg-white border border-slate-200 rounded-xl shadow-sm;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium;
+}
+
+.badge-success {
+  @apply bg-emerald-100 text-emerald-700;
+}
+
+.badge-warning {
+  @apply bg-amber-100 text-amber-700;
+}
+
+.badge-muted {
+  @apply bg-slate-100 text-slate-600;
+}
